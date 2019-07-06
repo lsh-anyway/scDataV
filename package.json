@@ -6,17 +6,32 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "commit": "git-cz",
+    "release": "standard-version"
   },
   "dependencies": {
+    "@types/echarts": "^4.1.9",
+    "axios": "^0.19.0",
     "core-js": "^2.6.5",
+    "echarts": "^4.2.1",
+    "element-ui": "^2.10.1",
+    "husky": "^3.0.0",
+    "normalize.css": "^8.0.1",
+    "screenfull": "^4.2.0",
+    "standard-version": "^6.0.1",
+    "v-charts": "^1.19.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
+    "vue-grid-layout": "^2.3.4",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
+    "vuedraggable": "^2.23.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "@types/jest": "^23.1.4",
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
@@ -28,12 +43,19 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-component": "^1.1.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.4.3",
+    "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.10"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e $GIT_PARAMS"
+    }
   }
 }
