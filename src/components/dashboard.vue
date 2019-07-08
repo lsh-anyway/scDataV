@@ -89,7 +89,8 @@ export default class Dashboard extends Vue {
   public resizeDashBoard() {
     const ViewportWidth = document.documentElement.clientWidth;
     const ViewportHeight = document.documentElement.clientHeight;
-    const scale = Math.min(ViewportWidth / 1980, ViewportHeight / 1080);
+    const scale = Math.min(ViewportWidth / 1920, ViewportHeight / 1080);
+
     this.$refs.dashboard.style.transform = `scale(${scale})`;
   }
 

@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import VCharts from 'v-charts';
 import 'normalize.css';
 import App from './App.vue';
 import router from './router/index';
@@ -11,7 +10,6 @@ import './plugins/axios';
 import './styles/base.scss';
 
 Vue.config.productionTip = false;
-Vue.use(VCharts);
 
 new Vue({
   router,

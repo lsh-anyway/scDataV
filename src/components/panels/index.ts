@@ -2,6 +2,7 @@ import Vue from 'vue';
 import linesPanel from './linesPanel.vue';
 import linePanel from './linePanel.vue';
 import barPanel from './barPanel.vue';
+import piePanel from './piePanel.vue';
 
 const components = [
   {
@@ -15,6 +16,10 @@ const components = [
   {
     name: 'barPanel',
     component: barPanel,
+  },
+  {
+    name: 'piePanel',
+    component: piePanel,
   },
 ];
 

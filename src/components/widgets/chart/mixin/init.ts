@@ -24,10 +24,13 @@ export default class ChartMixin extends Vue {
   // public options!: echarts.EChartOption;
   public options!: any;
 
+  public init: any;
+
   public mounted() {
     setTimeout(() => {
       this.chart = echarts.init(this.$refs.chart);
       this.chart.setOption(this.options);
+      this.init && this.init();
     }, 100);
   }
 }

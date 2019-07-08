@@ -8,20 +8,20 @@ import './widgets/index';
 
 const components = [
   {
-    name: 'dashboardTitle',
-    component: title,
-  },
-  {
-    name: 'panel',
-    component: panel,
-  },
-  {
     name: 'dashboard',
     component: dashboard,
   },
   {
     name: 'tableBar',
     component: tableBar,
+  },
+  {
+    name: 'dashboardTitle',
+    component: title,
+  },
+  {
+    name: 'panel',
+    component: panel,
   },
 ];
 

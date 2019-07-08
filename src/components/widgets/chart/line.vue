@@ -69,9 +69,9 @@ export default class scLine extends Mixins(init) {
         },
         areaStyle: {
           color: this.$utils.echartsUtils.linearGradientColor(0, 0, 0, 1, [{
-            offset: 0, color: '#6cf5f2',
+            offset: 0, color: 'rgba(108, 245, 242, 1)',
           }, {
-            offset: 1, color: 'transparent',
+            offset: 1, color: 'rgba(108, 245, 242, 0.2)',
           }]),
         },
       }],
@@ -83,6 +83,6 @@ export default class scLine extends Mixins(init) {
 <style lang="scss" scoped>
 .chart {
   width: 100%;
-  height: 100%;
+  height: 50%;
 }
 </style>

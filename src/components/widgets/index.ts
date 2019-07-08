@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Bar from './chart/bar.vue';
 import Line from './chart/line.vue';
 import Lines from './chart/lines.vue';
+import Pie from './chart/pie.vue';
 import tableBar from './table-bar/table-bar.vue';
 
 const components = [
@@ -16,6 +17,10 @@ const components = [
   {
     name: 'scLines',
     component: Lines,
+  },
+  {
+    name: 'scPie',
+    component: Pie,
   },
   {
     name: 'scTableBar',

@@ -1,6 +1,6 @@
 <template>
   <div class="home" @click="fullscreen">
-    <dashboard :layout="layout" :edit="true"></dashboard>
+    <dashboard ref="dashboard" :layout="layout" :edit="false"></dashboard>
   </div>
 </template>
 
@@ -109,7 +109,7 @@ const layout = [
     h: 9,
     i: '1',
     static: true,
-    component: 'panel',
+    component: 'piePanel',
   },
   {
     x: 13,
