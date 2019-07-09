@@ -35,6 +35,7 @@ export default class scPie extends Mixins(init) {
         {
           name: '访问来源',
           type: 'pie',
+          center: ['50%', '60%'],
           radius: ['60%', '70%'],
           hoverAnimation: true,
           hoverOffset: 5,
@@ -74,6 +75,44 @@ export default class scPie extends Mixins(init) {
     this.init = () => {
       this.highlightAnimation();
       this.initChartEvent();
+    };
+
+    this.convertData = () => {
+      const serie: any = {
+        name: '访问来源',
+        type: 'pie',
+        center: ['50%', '60%'],
+        radius: ['60%', '70%'],
+        hoverAnimation: true,
+        hoverOffset: 5,
+        avoidLabelOverlap: false,
+        label: {
+          normal: {
+            show: false,
+            position: 'center',
+            formatter: '{d}%\n\n{b}',
+            textStyle: {
+              fontSize: '16',
+              fontWeight: 'normal',
+            },
+          },
+          emphasis: {
+            show: true,
+          },
+        },
+        labelLine: {
+          normal: {
+            show: false,
+          },
+        },
+        data: [],
+      };
+      this.schema.forEach((schema) => {
+        const formatter = schema.formatter || ((val: any) => val);
+        serie.data.push({ value: formatter(this.data[schema.prop]), name: schema.label });
+      });
+
+      this.options.series = [serie];
     };
   }
 

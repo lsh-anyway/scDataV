@@ -1,25 +1,89 @@
 <template>
-  <div class="panel">
+  <div class="panel"
+       ref="panel">
     <div class="bg"></div>
-    <slot></slot>
+    <grid-layout v-loading="loading"
+                 :layout.sync="layout"
+                 :col-num="24"
+                 :row-height="30"
+                 :is-draggable="edit"
+                 :is-resizable="edit"
+                 :is-mirrored="false"
+                 :autoSize="false"
+                 :margin="[0, 0]"
+                 :vertical-compact="false"
+                 :use-css-transforms="true"
+                 @layout-updated="handleLayoutChange">
+      <grid-item v-for="item in layout || []"
+                 :key="item.index"
+                 :x="item.x"
+                 :y="item.y"
+                 :w="item.w"
+                 :h="item.h"
+                 :i="item.i"
+                 :static="item.static">
+        <component v-if="item.component"
+                   :is="item.component"
+                   v-bind="item.prop"></component>
+        <div v-else
+             :style="item.style">
+          {{item.title}}
+        </div>
+      </grid-item>
+      <slot></slot>
+    </grid-layout>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { GridLayout, GridItem } from 'vue-grid-layout';
+import { LayoutItem } from '@/@types/interface.d';
 
-@Component
-export default class Panel extends Vue {}
+@Component({
+  components: {
+    GridLayout,
+    GridItem,
+  },
+})
+export default class Panel extends Vue {
+  @Prop({
+    type: Array,
+    default: () => [],
+  })
+  public layout!: LayoutItem[];
+
+  @Prop({
+    type: Boolean,
+    default: () => false,
+  })
+  public loading!: boolean;
+
+  @Prop({
+    type: Boolean,
+    default: () => false,
+  })
+  public edit!: boolean;
+
+  public handleLayoutChange(newLayout: LayoutItem[]) {
+    console.log(newLayout);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .panel {
-  position: relative;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   padding: 12px;
   color: #fff;
+  .vue-grid-layout {
+    width: 100%;
+    height: 100%;
+  }
   .bg {
     position: absolute;
     top: 0;
@@ -27,9 +91,11 @@ export default class Panel extends Vue {}
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    background: linear-gradient(#091b4d, #0f0f23);
+    // background: linear-gradient(#091b4d, #0f0f23);
+    background: RGBA(29, 22, 52, 0.5);
     border-top: 2px solid #1f3564;
     border-bottom: 2px solid #1f3564;
+    filter: blur(2px);
     opacity: 0.4;
     z-index: -1;
   }

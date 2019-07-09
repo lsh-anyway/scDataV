@@ -1,13 +1,15 @@
 <template>
-  <panel class="table-bar">
+  <div class="table-bar">
     <div class="title">{{title}}</div>
-    <table-bar-item v-for="(item, index) in formatData"
-                    v-bind="item"
-                    :key="index"
-                    :rank="index+1"
-                    :proportion="proportion(item.value)"
-                    :transition="transitionIndex === index"></table-bar-item>
-  </panel>
+    <div class="table-bar-list" ref="list">
+      <table-bar-item v-for="(item, index) in formatData"
+                      v-bind="item"
+                      :key="index"
+                      :rank="index+1"
+                      :proportion="proportion(item.value)"
+                      :transition="transitionIndex === index"></table-bar-item>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -22,6 +24,8 @@ import tableBarItem from './table-bar-item.vue';
   },
 })
 export default class TableBar extends Vue {
+  public $refs: any
+
   @Prop({
     type: String,
     required: true,
@@ -34,6 +38,8 @@ export default class TableBar extends Vue {
   })
   public data!: any[];
 
+  public visibleData!: any[];
+
   public transitionIndex: number;
 
   public transitionTimer: any;
@@ -42,13 +48,26 @@ export default class TableBar extends Vue {
     super();
     this.transitionIndex = 0;
     this.transitionTimer = null;
+    this.visibleData = [];
   }
 
   public get formatData() {
-    return this.data.sort((a, b) => b.value - a.value);
+    return this.visibleData.sort((a, b) => b.value - a.value);
   }
 
   @Watch('data', {
+    immediate: true,
+    deep: true,
+  })
+  public calcItemLen() {
+    this.$nextTick(() => {
+      const height = this.$refs.list && this.$refs.list.clientHeight;
+      const length = Math.floor(height / 45);
+      this.visibleData = this.data.slice(0, length - 1);
+    });
+  }
+
+  @Watch('visibleData', {
     immediate: true,
     deep: true,
   })
@@ -85,8 +104,16 @@ export default class TableBar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.title {
-  font-size: 18px;
-  margin-bottom: 24px;
+.table-bar {
+  height: 100%;
+  color: #fff;
+  .title {
+    font-size: 18px;
+    margin-bottom: 24px;
+  }
+  .table-bar-list {
+    position: relative;
+    height: calc(100% - 42px);
+  }
 }
 </style>

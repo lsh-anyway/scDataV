@@ -4,6 +4,7 @@ import Line from './chart/line.vue';
 import Lines from './chart/lines.vue';
 import Pie from './chart/pie.vue';
 import tableBar from './table-bar/table-bar.vue';
+import Card from './card.vue';
 
 const components = [
   {
@@ -25,6 +26,10 @@ const components = [
   {
     name: 'scTableBar',
     component: tableBar,
+  },
+  {
+    name: 'scCard',
+    component: Card,
   },
 ];
 

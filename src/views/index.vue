@@ -1,6 +1,9 @@
 <template>
-  <div class="home" @click="fullscreen">
-    <dashboard ref="dashboard" :layout="layout" :edit="false"></dashboard>
+  <div class="home"
+       @click="fullscreen">
+    <dashboard ref="dashboard"
+               :layout="layout"
+               :edit="false"></dashboard>
   </div>
 </template>
 
@@ -15,13 +18,31 @@ const layout = [
     x: 4,
     y: 0,
     w: 16,
-    h: 5,
+    h: 2,
     i: '0',
     static: true,
-    component: 'dashboardTitle',
-    prop: {
-      title: '罗湖区新媒体宣传综合管理平台',
+    title: '罗湖区新媒体宣传综合管理平台',
+    style: {
+      width: '100%',
+      height: '100%',
+      color: '#fff',
+      fontSize: '36px',
+      textAlign: 'center',
+      lineHeight: 2,
     },
+    // component: 'dashboardTitle',
+    // prop: {
+    //   title: '罗湖区新媒体宣传综合管理平台',
+    // },
+  },
+  {
+    x: 4,
+    y: 1,
+    w: 16,
+    h: 3,
+    i: '0',
+    static: true,
+    component: 'titleDecorations',
   },
   {
     x: 0.5,
@@ -30,47 +51,7 @@ const layout = [
     h: 18,
     i: '1',
     static: false,
-    component: 'tableBar',
-    prop: {
-      title: '文章阅读量排名',
-      data: [{
-        name: '测试很长很长很长很长很长很长的标题',
-        value: 100,
-      }, {
-        name: '标题',
-        value: 95,
-      }, {
-        name: '标题',
-        value: 80,
-      }, {
-        name: '标题',
-        value: 65,
-      }, {
-        name: '标题',
-        value: 55,
-      }, {
-        name: '标题',
-        value: 50,
-      }, {
-        name: '标题',
-        value: 45,
-      }, {
-        name: '标题',
-        value: 40,
-      }, {
-        name: '标题',
-        value: 35,
-      }, {
-        name: '标题',
-        value: 30,
-      }, {
-        name: '标题',
-        value: 25,
-      }, {
-        name: '标题',
-        value: 10,
-      }],
-    },
+    component: 'tableBarPanel',
   },
   {
     x: 3.5,
@@ -159,5 +140,4 @@ export default class Home extends Vue {
 
 
 <style lang="scss" scoped>
-
 </style>

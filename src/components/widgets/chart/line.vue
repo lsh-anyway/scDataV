@@ -3,13 +3,20 @@
        class="chart"></div>
 </template>
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator';
+import { Component, Mixins, Prop } from 'vue-property-decorator';
 import init from './mixin/init';
 
 @Component
 export default class scLine extends Mixins(init) {
+  @Prop({
+    default: () => 'xAxis',
+  })
+  private mainAxis!: string
+
   constructor() {
     super();
+    const { mainAxis } = this;
+    const secondaryAxis = mainAxis === 'xAxis' ? 'yAxis' : 'xAxis';
     this.options = {
       title: {
         text: '世界人口总量',
@@ -19,6 +26,7 @@ export default class scLine extends Mixins(init) {
           fontWeight: 'lighter',
         },
       },
+      color: ['#6cf5f2', '#2B80CF', '#327EC8', '#486CB6', '#FFFFFF', '#24FEB4', '#23539B', '#3C9DE4'],
       textStyle: {
         color: '#1397FF',
         fontSize: 12,
@@ -31,7 +39,7 @@ export default class scLine extends Mixins(init) {
         bottom: '0%',
         containLabel: true,
       },
-      xAxis: {
+      [mainAxis]: {
         type: 'category',
         boundaryGap: false,
         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -44,7 +52,7 @@ export default class scLine extends Mixins(init) {
           // },
         },
       },
-      yAxis: {
+      [secondaryAxis]: {
         type: 'value',
         splitLine: {
           lineStyle: {
@@ -71,10 +79,45 @@ export default class scLine extends Mixins(init) {
           color: this.$utils.echartsUtils.linearGradientColor(0, 0, 0, 1, [{
             offset: 0, color: 'rgba(108, 245, 242, 1)',
           }, {
-            offset: 1, color: 'rgba(108, 245, 242, 0.2)',
+            offset: 1, color: 'rgba(108, 245, 242, 0)',
           }]),
         },
       }],
+    };
+
+    this.convertData = () => {
+      const mainAxisData: any[] = [];
+      const series: any[] = [];
+      this.schema.forEach((schema) => {
+        if (schema.isMainAxis) {
+          this.data.forEach((data: any) => {
+            mainAxisData.push(data[schema.prop]);
+          });
+        } else {
+          const serie: any = {
+            type: 'line',
+            name: schema.label,
+            z: 10,
+            data: [],
+            areaStyle: {
+              color: this.$utils.echartsUtils.linearGradientColor(0, 0, 0, 1, [{
+                offset: 0, color: this.options.color[series.length],
+              }, {
+                offset: 1, color: 'transparent',
+              }]),
+            },
+          };
+          const formatter = schema.formatter || ((val: any) => val);
+          const hasShadow = schema.hasShadow || false;
+          this.data.forEach((data: any) => {
+            serie.data.push(formatter(data[schema.prop]));
+          });
+          series.push(serie);
+        }
+      });
+
+      this.options.series = series;
+      this.options[this.mainAxis].data = mainAxisData;
     };
   }
 }
@@ -83,6 +126,6 @@ export default class scLine extends Mixins(init) {
 <style lang="scss" scoped>
 .chart {
   width: 100%;
-  height: 50%;
+  height: 100%;
 }
 </style>

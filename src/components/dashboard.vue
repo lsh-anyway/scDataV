@@ -1,5 +1,6 @@
 <template>
-  <div class="dashboard" ref="dashboard">
+  <div class="dashboard"
+       ref="dashboard">
     <grid-layout v-loading="loading"
                  :layout.sync="layout"
                  :col-num="24"
@@ -20,7 +21,13 @@
                  :h="item.h"
                  :i="item.i"
                  :static="item.static">
-          <component :is="item.component" v-bind="item.prop"></component>
+        <component v-if="item.component"
+                   :is="item.component"
+                   v-bind="item.prop"></component>
+        <div v-else
+             :style="item.style">
+          {{item.title}}
+        </div>
       </grid-item>
     </grid-layout>
   </div>
@@ -39,8 +46,8 @@ import { LayoutItem } from '../@types/interface.d';
 })
 export default class Dashboard extends Vue {
   public $refs!: {
-    dashboard: HTMLElement
-  }
+    dashboard: HTMLElement;
+  };
 
   @Prop({
     type: Array,
@@ -59,7 +66,6 @@ export default class Dashboard extends Vue {
     default: () => false,
   })
   public edit!: boolean;
-
 
   public mounted() {
     if (!this.edit) {
@@ -105,9 +111,9 @@ export default class Dashboard extends Vue {
   width: 1920px;
   height: 1080px;
   transform-origin: left top;
-  background-image: url('~@/assets/bg.png');
+  background-image: url("~@/assets/bg.png");
   background-size: 1920px 1080px;
-  .vue-grid-layout{
+  .vue-grid-layout {
     width: 1920px;
     height: 1080px;
   }

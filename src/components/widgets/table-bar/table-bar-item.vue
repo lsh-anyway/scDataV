@@ -5,12 +5,14 @@
       <span class="name"
             ref="wrapper">
         <div class="inner"
-             ref="inner">{{name}}</div>
+             ref="inner"
+             :class="wordsLoop">{{name}}</div>
       </span>
     </div>
     <div class="line"
          :style="lineWidth">
-      <div class="light" :style="ligntTransition"></div>
+      <div class="light"
+           :style="ligntTransition"></div>
     </div>
     <div class="line-segment"></div>
   </div>
@@ -47,6 +49,8 @@ export default class TableBarItem extends Vue {
   })
   public transition!: boolean;
 
+  public wordsLoop = '';
+
   public get lineWidth() {
     return {
       width: `${this.proportion}%`,
@@ -56,7 +60,9 @@ export default class TableBarItem extends Vue {
   public get ligntTransition() {
     return {
       transform: `translateX(${this.transition ? '-70px' : '220px'})`,
-      background: this.transition ? '' : 'radial-gradient(rgb(40, 248, 255) 5%, rgba(0, 0, 0, 0) 80%)',
+      background: this.transition
+        ? ''
+        : 'radial-gradient(rgb(40, 248, 255) 5%, rgba(0, 0, 0, 0) 80%)',
     };
   }
 
@@ -70,7 +76,9 @@ export default class TableBarItem extends Vue {
     const wrapperWidth = this.$refs.wrapper.clientWidth;
     const innerWidth = this.$refs.inner.clientWidth;
     if (innerWidth > wrapperWidth) {
-      this.$refs.inner.classList.add('wordsLoop');
+      this.wordsLoop = 'wordsLoop';
+    } else {
+      this.wordsLoop = '';
     }
   }
 }

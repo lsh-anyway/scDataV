@@ -4,8 +4,8 @@ export interface LayoutItem {
   w: number;
   h: number;
   i: string;
-  static: boolean;
-  component: string;
+  static?: boolean;
+  component?: string;
   [key: string]: any;
 }
 
