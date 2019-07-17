@@ -5,7 +5,7 @@
     <grid-layout v-loading="loading"
                  :layout.sync="layout"
                  :col-num="24"
-                 :row-height="30"
+                 :row-height="rowHeight"
                  :is-draggable="edit"
                  :is-resizable="edit"
                  :is-mirrored="false"
@@ -22,7 +22,8 @@
                  :h="item.h"
                  :i="item.i"
                  :static="item.static">
-        <component v-if="item.component"
+        <component ref="layoutItem"
+                   v-if="item.component"
                    :is="item.component"
                    v-bind="item.prop"></component>
         <div v-else
@@ -65,8 +66,26 @@ export default class Panel extends Vue {
   })
   public edit!: boolean;
 
+  public $refs: any;
+
+  public rowHeight = 30;
+
   public handleLayoutChange(newLayout: LayoutItem[]) {
     console.log(newLayout);
+  }
+
+  public resize() {
+    this.$nextTick(() => {
+      const height = this.$refs.panel.clientHeight;
+      this.rowHeight = height / 12;
+      this.$refs.layoutItem && this.$refs.layoutItem.forEach((item: any) => {
+        item.resize && item.resize();
+      });
+    });
+  }
+
+  public mounted() {
+    this.resize();
   }
 }
 </script>

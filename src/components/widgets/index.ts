@@ -3,8 +3,11 @@ import Bar from './chart/bar.vue';
 import Line from './chart/line.vue';
 import Lines from './chart/lines.vue';
 import Pie from './chart/pie.vue';
+import Radar from './chart/radar.vue';
 import tableBar from './table-bar/table-bar.vue';
 import Card from './card.vue';
+import SimpleTable from './simple-table.vue';
+import Table from './table.vue';
 
 const components = [
   {
@@ -24,12 +27,24 @@ const components = [
     component: Pie,
   },
   {
+    name: 'scRadar',
+    component: Radar,
+  },
+  {
     name: 'scTableBar',
     component: tableBar,
   },
   {
     name: 'scCard',
     component: Card,
+  },
+  {
+    name: 'scSimpleTable',
+    component: SimpleTable,
+  },
+  {
+    name: 'scTable',
+    component: Table,
   },
 ];
 

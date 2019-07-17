@@ -13,31 +13,20 @@ export default class scBar extends Mixins(init) {
   })
   private mainAxis!: string
 
+  private secondaryAxis: string
+
   constructor() {
     super();
     const { mainAxis } = this;
     const secondaryAxis = mainAxis === 'xAxis' ? 'yAxis' : 'xAxis';
-    this.options = {
-      title: {
-        text: '世界人口总量',
-        textStyle: {
-          color: '#fff',
-          fontSize: 18,
-          fontWeight: 'lighter',
-        },
-      },
-      color: ['#0c2f3f', this.$utils.echartsUtils.linearGradientColor(0, 0, 1, 0, [{
-        offset: 0,
-        color: '#2b82cf',
-      }, {
-        offset: 1,
-        color: '#01fdcc',
-      }])],
+    this.secondaryAxis = secondaryAxis;
+    this.chartOptions = {
+      color: ['#6cf5f2', '#2B80CF', '#327EC8', '#486CB6', '#FFFFFF', '#24FEB4', '#23539B', '#3C9DE4'],
       grid: {
-        top: '40px',
-        left: '0%',
+        top: '20px',
+        left: '20px',
         right: '20px',
-        bottom: '0%',
+        bottom: '20px',
         containLabel: true,
       },
       textStyle: {
@@ -57,31 +46,19 @@ export default class scBar extends Mixins(init) {
         // 刻度
         axisTick: { show: false },
       },
-      series: [
-        {
-          type: 'bar',
-          silent: true,
-          barWidth: 10,
-          barGap: '-100%', // Make series be overlap
-          data: [60, 60, 60, 60, 60, 60, 60],
-        },
-        {
-          type: 'bar',
-          barWidth: 10,
-          z: 10,
-          data: [45, 60, 13, 25, 13, 25, 25],
-        },
-      ],
+      ...this.options,
     };
 
     this.convertData = () => {
       const mainAxisData: any[] = [];
       const series: any[] = [];
+      let max: any = 0;
       this.schema.forEach((schema) => {
         if (schema.isMainAxis) {
           this.data.forEach((data: any) => {
             mainAxisData.push(data[schema.prop]);
           });
+          // this.chartOptions[this.mainAxis].name = schema.label;
         } else {
           const serie: any = {
             type: 'bar',
@@ -89,34 +66,34 @@ export default class scBar extends Mixins(init) {
             name: schema.label,
             z: 10,
             data: [],
+            ...schema.options,
           };
           const formatter = schema.formatter || ((val: any) => val);
           const hasShadow = schema.hasShadow || false;
+          this.data.forEach((data: any) => {
+            serie.data.push(formatter(data[schema.prop]));
+            max = max > data[schema.prop] ? max : data[schema.prop];
+          });
           if (hasShadow) {
-            let shadowHeight: any = 0;
-            this.data.forEach((data: any) => {
-              serie.data.push(formatter(data[schema.prop]));
-              shadowHeight = shadowHeight > data[schema.prop] ? shadowHeight : data[schema.prop];
-            });
             const shadowSerie = {
               type: 'bar',
               silent: true,
               barWidth: 10,
               barGap: '-100%', // Make series be overlap
-              data: new Array(this.data.length).fill(shadowHeight),
+              data: new Array(this.data.length).fill(max),
+              itemStyle: {
+                color: '#0c2f3f',
+              },
             };
             series.push(shadowSerie);
-          } else {
-            this.data.forEach((data: any) => {
-              serie.data.push(formatter(data[schema.prop]));
-            });
           }
           series.push(serie);
         }
       });
 
-      this.options.series = series;
-      this.options[this.mainAxis].data = mainAxisData;
+      this.chartOptions.series = series;
+      this.chartOptions[this.mainAxis].data = mainAxisData;
+      this.chartOptions[this.secondaryAxis].max = max;
     };
   }
 }

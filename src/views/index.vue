@@ -3,7 +3,8 @@
        @click="fullscreen">
     <dashboard ref="dashboard"
                :layout="layout"
-               :edit="false"></dashboard>
+               :resize="true"
+               :background="background"></dashboard>
   </div>
 </template>
 
@@ -11,7 +12,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import screenfull, { Screenfull } from 'screenfull';
-import { LayoutItem } from '../@types/interface.d';
+import { LayoutItem } from '@/@types/interface.d';
+import barData from '@/mock/barData';
+
+const backgroundImage = require('@/assets/bg.png');
 
 const layout = [
   {
@@ -42,11 +46,11 @@ const layout = [
     h: 3,
     i: '0',
     static: true,
-    component: 'titleDecorations',
+    component: 'titleDecoration',
   },
   {
     x: 0.5,
-    y: 3,
+    y: 4,
     w: 3,
     h: 18,
     i: '1',
@@ -55,7 +59,7 @@ const layout = [
   },
   {
     x: 3.5,
-    y: 3,
+    y: 4,
     w: 9.5,
     h: 18,
     i: '1',
@@ -64,7 +68,7 @@ const layout = [
   },
   {
     x: 13,
-    y: 3,
+    y: 4,
     w: 3.5,
     h: 9,
     i: '1',
@@ -76,7 +80,7 @@ const layout = [
   },
   {
     x: 16.5,
-    y: 3,
+    y: 4,
     w: 3.5,
     h: 9,
     i: '1',
@@ -85,7 +89,7 @@ const layout = [
   },
   {
     x: 20,
-    y: 3,
+    y: 4,
     w: 3.5,
     h: 9,
     i: '1',
@@ -94,16 +98,16 @@ const layout = [
   },
   {
     x: 13,
-    y: 12,
+    y: 13,
     w: 3.5,
     h: 9,
     i: '1',
     static: true,
-    component: 'panel',
+    component: 'radarPanel',
   },
   {
     x: 16.5,
-    y: 12,
+    y: 13,
     w: 3.5,
     h: 9,
     i: '1',
@@ -112,22 +116,93 @@ const layout = [
   },
   {
     x: 20,
-    y: 12,
+    y: 13,
     w: 3.5,
     h: 9,
     i: '1',
     static: true,
     component: 'panel',
   },
+  {
+    x: 3.5,
+    y: 22.5,
+    w: 9.5,
+    h: 4,
+    i: '1',
+    static: true,
+    component: 'scLine',
+    prop: {
+      data: barData.data,
+      schema: [
+        {
+          label: '日期',
+          prop: 'date',
+          formatter: '',
+          isMainAxis: true,
+        },
+        {
+          label: '生命值',
+          prop: 'a',
+          formatter: '',
+          isMainAxis: false,
+          hasShadow: true,
+        },
+      ],
+    },
+  },
+  {
+    x: 13,
+    y: 23,
+    w: 3.5,
+    h: 2.5,
+    i: '1',
+    static: true,
+    component: 'scSimpleTable',
+    prop: {
+      data: [
+        {
+          label: '接入新媒体账号数量',
+          value: '24个',
+        },
+        {
+          label: '累计粉丝总量',
+          value: '1435万人',
+        },
+      ],
+    },
+  },
+  {
+    x: 16.5,
+    y: 23,
+    w: 3.5,
+    h: 2.5,
+    i: '1',
+    static: true,
+    component: 'scSimpleTable',
+  },
+  {
+    x: 20,
+    y: 23,
+    w: 3.5,
+    h: 2.5,
+    i: '1',
+    static: true,
+    component: 'scSimpleTable',
+  },
 ];
 
 @Component
 export default class Home extends Vue {
-  private layout!: LayoutItem[]
+  private layout!: LayoutItem[];
+
+  private background: any;
 
   constructor() {
     super();
     this.layout = layout;
+    this.background = {
+      backgroundImage: `url(${backgroundImage})`,
+    };
   }
 
   public fullscreen() {

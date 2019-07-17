@@ -267,7 +267,7 @@ export default class scLines extends Mixins(init) {
       );
     });
 
-    this.options = {
+    this.chartOptions = {
       // backgroundColor: '#404a59',
       title: {
         text: '模拟迁徙',

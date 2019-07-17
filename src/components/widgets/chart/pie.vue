@@ -8,66 +8,22 @@ import init from './mixin/init';
 
 @Component
 export default class scPie extends Mixins(init) {
-  private animation: any
+  private animation: any;
 
-  private highlightIndex: number
+  private highlightIndex: number;
 
-  private timeout: number
+  private timeout: number;
 
   constructor() {
     super();
-    this.options = {
-      title: {
-        text: '世界人口总量',
-        textStyle: {
-          color: '#fff',
-          fontSize: 18,
-          fontWeight: 'lighter',
-        },
-      },
+    this.chartOptions = {
       textStyle: {
         color: '#FFF',
         fontSize: 12,
         fontWeight: 'lighter',
       },
       color: ['#486CB6', '#FFFFFF', '#24FEB4', '#23539B', '#3C9DE4'],
-      series: [
-        {
-          name: '访问来源',
-          type: 'pie',
-          center: ['50%', '60%'],
-          radius: ['60%', '70%'],
-          hoverAnimation: true,
-          hoverOffset: 5,
-          avoidLabelOverlap: false,
-          label: {
-            normal: {
-              show: false,
-              position: 'center',
-              formatter: '{d}%\n\n{b}',
-              textStyle: {
-                fontSize: '16',
-                fontWeight: 'normal',
-              },
-            },
-            emphasis: {
-              show: true,
-            },
-          },
-          labelLine: {
-            normal: {
-              show: false,
-            },
-          },
-          data: [
-            { value: 335, name: '直接访问' },
-            { value: 310, name: '邮件营销' },
-            { value: 234, name: '联盟广告' },
-            { value: 135, name: '视频广告' },
-            { value: 1548, name: '搜索引擎' },
-          ],
-        },
-      ],
+      ...this.options,
     };
     this.highlightIndex = 0;
     this.timeout = 3000;
@@ -81,7 +37,7 @@ export default class scPie extends Mixins(init) {
       const serie: any = {
         name: '访问来源',
         type: 'pie',
-        center: ['50%', '60%'],
+        center: ['50%', '50%'],
         radius: ['60%', '70%'],
         hoverAnimation: true,
         hoverOffset: 5,
@@ -107,12 +63,23 @@ export default class scPie extends Mixins(init) {
         },
         data: [],
       };
-      this.schema.forEach((schema) => {
-        const formatter = schema.formatter || ((val: any) => val);
-        serie.data.push({ value: formatter(this.data[schema.prop]), name: schema.label });
+      this.data.forEach((data: any) => {
+        let name: any;
+        this.schema.forEach((schema) => {
+          const formatter = schema.formatter || ((val: any) => val);
+          if (schema.isMainAxis) {
+            name = data[schema.prop];
+          } else {
+            serie.data.push({
+              value: formatter(data[schema.prop]),
+              name,
+              ...schema.options,
+            });
+          }
+        });
       });
 
-      this.options.series = [serie];
+      this.chartOptions.series = [serie];
     };
   }
 
@@ -136,7 +103,7 @@ export default class scPie extends Mixins(init) {
   }
 
   public highlightAnimation() {
-    const { length } = this.options.series[0].data;
+    const { length } = this.chartOptions.series[0].data;
     this.chart.dispatchAction({
       type: 'highlight',
       dataIndex: this.highlightIndex % length,

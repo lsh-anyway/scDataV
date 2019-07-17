@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard"
-       ref="dashboard">
+       ref="dashboard"
+       :style="background">
     <grid-layout v-loading="loading"
                  :layout.sync="layout"
                  :col-num="24"
@@ -13,15 +14,17 @@
                  :margin="[10, 10]"
                  :use-css-transforms="true"
                  @layout-updated="handleLayoutChange">
-      <grid-item v-for="item in layout || []"
-                 :key="item.index"
+      <grid-item v-for="(item, index) in layout || []"
+                 :key="index"
                  :x="item.x"
                  :y="item.y"
                  :w="item.w"
                  :h="item.h"
-                 :i="item.i"
-                 :static="item.static">
+                 :i="index"
+                 :static="item.static"
+                 @resized="handleResize">
         <component v-if="item.component"
+                   :ref="`layoutItem${index}`"
                    :is="item.component"
                    v-bind="item.prop"></component>
         <div v-else
@@ -47,6 +50,7 @@ import { LayoutItem } from '../@types/interface.d';
 export default class Dashboard extends Vue {
   public $refs!: {
     dashboard: HTMLElement;
+    [key: string]: any;
   };
 
   @Prop({
@@ -54,6 +58,12 @@ export default class Dashboard extends Vue {
     default: () => [],
   })
   public layout!: LayoutItem[];
+
+  @Prop({
+    type: Object,
+    default: () => {},
+  })
+  public background: any;
 
   @Prop({
     type: Boolean,
@@ -67,27 +77,33 @@ export default class Dashboard extends Vue {
   })
   public edit!: boolean;
 
+  @Prop({
+    type: Boolean,
+    default: () => false,
+  })
+  public resize!: boolean;
+
   public mounted() {
-    if (!this.edit) {
+    if (this.resize) {
       this.resizeDashBoard();
       window.addEventListener('resize', this.resizeDashBoard);
     }
   }
 
   public activated() {
-    if (!this.edit) {
+    if (this.resize) {
       window.addEventListener('resize', this.resizeDashBoard);
     }
   }
 
   public beforeDestroy() {
-    if (!this.edit) {
+    if (this.resize) {
       window.removeEventListener('resize', this.resizeDashBoard);
     }
   }
 
   public deactivated() {
-    if (!this.edit) {
+    if (this.resize) {
       window.removeEventListener('resize', this.resizeDashBoard);
     }
   }
@@ -102,6 +118,12 @@ export default class Dashboard extends Vue {
 
   public handleLayoutChange(newLayout: LayoutItem[]) {
     console.log(newLayout);
+    this.$emit('update:layout', newLayout);
+  }
+
+  public handleResize(i: string, newH: string, newW: string, newHPx: string, newWPx: string) {
+    console.log('TCL: Dashboard -> handleResize -> handleResize');
+    this.$refs[`layoutItem${i}`] && this.$refs[`layoutItem${i}`].resize && this.$refs[`layoutItem${i}`].resize();
   }
 }
 </script>
@@ -111,7 +133,6 @@ export default class Dashboard extends Vue {
   width: 1920px;
   height: 1080px;
   transform-origin: left top;
-  background-image: url("~@/assets/bg.png");
   background-size: 1920px 1080px;
   .vue-grid-layout {
     width: 1920px;

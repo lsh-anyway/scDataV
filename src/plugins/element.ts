@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Button, Loading } from 'element-ui';
+import Element from 'element-ui';
+import '../element-variables.scss';
 
-Vue.use(Button);
-Vue.use(Loading);
+Vue.use(Element);

@@ -17,15 +17,8 @@ export default class scLine extends Mixins(init) {
     super();
     const { mainAxis } = this;
     const secondaryAxis = mainAxis === 'xAxis' ? 'yAxis' : 'xAxis';
-    this.options = {
-      title: {
-        text: '世界人口总量',
-        textStyle: {
-          color: '#fff',
-          fontSize: 18,
-          fontWeight: 'lighter',
-        },
-      },
+    this.chartOptions = {
+      title: this.title,
       color: ['#6cf5f2', '#2B80CF', '#327EC8', '#486CB6', '#FFFFFF', '#24FEB4', '#23539B', '#3C9DE4'],
       textStyle: {
         color: '#1397FF',
@@ -33,16 +26,15 @@ export default class scLine extends Mixins(init) {
         fontWeight: 'lighter',
       },
       grid: {
-        top: '50px',
-        left: '0%',
-        right: '3%',
-        bottom: '0%',
+        top: '20px',
+        left: '20px',
+        right: '20px',
+        bottom: '20px',
         containLabel: true,
       },
       [mainAxis]: {
         type: 'category',
         boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         // 刻度
         axisTick: { show: false },
         // 轴线
@@ -69,20 +61,7 @@ export default class scLine extends Mixins(init) {
           // },
         },
       },
-      series: [{
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-        itemStyle: {
-          color: '#6cf5f2',
-        },
-        areaStyle: {
-          color: this.$utils.echartsUtils.linearGradientColor(0, 0, 0, 1, [{
-            offset: 0, color: 'rgba(108, 245, 242, 1)',
-          }, {
-            offset: 1, color: 'rgba(108, 245, 242, 0)',
-          }]),
-        },
-      }],
+      ...this.options,
     };
 
     this.convertData = () => {
@@ -93,6 +72,7 @@ export default class scLine extends Mixins(init) {
           this.data.forEach((data: any) => {
             mainAxisData.push(data[schema.prop]);
           });
+          // this.chartOptions[this.mainAxis].name = schema.label;
         } else {
           const serie: any = {
             type: 'line',
@@ -101,14 +81,14 @@ export default class scLine extends Mixins(init) {
             data: [],
             areaStyle: {
               color: this.$utils.echartsUtils.linearGradientColor(0, 0, 0, 1, [{
-                offset: 0, color: this.options.color[series.length],
+                offset: 0, color: this.chartOptions.color[series.length],
               }, {
                 offset: 1, color: 'transparent',
               }]),
             },
+            ...schema.options,
           };
           const formatter = schema.formatter || ((val: any) => val);
-          const hasShadow = schema.hasShadow || false;
           this.data.forEach((data: any) => {
             serie.data.push(formatter(data[schema.prop]));
           });
@@ -116,8 +96,8 @@ export default class scLine extends Mixins(init) {
         }
       });
 
-      this.options.series = series;
-      this.options[this.mainAxis].data = mainAxisData;
+      this.chartOptions.series = series;
+      this.chartOptions[this.mainAxis].data = mainAxisData;
     };
   }
 }

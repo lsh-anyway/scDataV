@@ -13,6 +13,15 @@ export default class PiePanel extends Vue {
 
   public chartData = pieData;
 
+  public title = {
+    text: '世界人口总量',
+    textStyle: {
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: 'lighter',
+    },
+  }
+
   public schema = [{
     label: '生命值',
     prop: 'a',
@@ -41,6 +50,7 @@ export default class PiePanel extends Vue {
         prop: {
           data: this.chartData,
           schema: this.schema,
+          title: this.title,
         },
       },
       {

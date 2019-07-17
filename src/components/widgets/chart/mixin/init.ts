@@ -2,14 +2,7 @@ import {
   Vue, Component, Prop, Watch,
 } from 'vue-property-decorator';
 import echarts from 'echarts';
-
-interface schema {
-  label: string;
-  prop: string;
-  formatter?: (val: any) => string;
-  isMainAxis?: boolean;
-  [key: string]: any;
-}
+import { axisSchema, schema } from '@/@types/interface.d';
 
 @Component
 export default class ChartMixin extends Vue {
@@ -17,26 +10,31 @@ export default class ChartMixin extends Vue {
     chart: HTMLDivElement;
   };
 
-  @Prop({
-    type: String,
-    // required: true,
-  })
-  // 图表类型
-  public type!: string;
-
   @Prop()
   // 图表数据
   public data!: any;
 
   @Prop()
-  // 图表数据模式
+  // 图表配置
+  public options!: any;
+
+  @Prop()
   public schema!: schema[];
 
-  public chart!: echarts.ECharts;
-  // public chart!: any;
+  @Prop()
+  // 图表标题
+  public title!: {
+    text: string;
+    textStyle?: {
+      color?: string;
+      fontSize?: number;
+      fontWeight?: string;
+    };
+  };
 
-  // public options!: echarts.EChartOption;
-  public options!: any;
+  public chart!: echarts.ECharts;
+
+  public chartOptions!: any;
 
   public init: any;
 
@@ -52,8 +50,12 @@ export default class ChartMixin extends Vue {
     setTimeout(() => {
       this.convertData && this.convertData();
       this.chart = echarts.init(this.$refs.chart);
-      this.chart.setOption(this.options);
+      this.chart.setOption(this.chartOptions);
       this.init && this.init();
     }, 100);
+  }
+
+  public resize() {
+    this.chart && this.chart.resize();
   }
 }

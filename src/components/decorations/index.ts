@@ -1,10 +1,15 @@
 import Vue from 'vue';
-import titleDecorations from './titleDecorations.vue';
+import titleDecoration from './titleDecoration.vue';
+import box from './box.vue';
 
 const components = [
   {
-    name: 'titleDecorations',
-    component: titleDecorations,
+    name: 'titleDecoration',
+    component: titleDecoration,
+  },
+  {
+    name: 'box',
+    component: box,
   },
 ];
 

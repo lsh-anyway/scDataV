@@ -6,9 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
     "commit": "git-cz",
-    "release": "standard-version"
+    "release": "standard-version",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@types/echarts": "^4.1.9",
@@ -28,7 +28,8 @@
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
     "vuedraggable": "^2.23.0",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-class": "^0.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
@@ -47,6 +48,7 @@
     "babel-plugin-component": "^1.1.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.2",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
