@@ -13,7 +13,7 @@
   "dependencies": {
     "@types/echarts": "^4.1.9",
     "@types/mockjs": "^1.0.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "core-js": "^2.6.5",
     "echarts": "^4.2.1",
     "element-ui": "^2.10.1",
